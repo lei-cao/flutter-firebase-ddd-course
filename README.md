@@ -1,16 +1,19 @@
 # flutter_firebase_ddd_course
 
-Flutter Firebase DDD Course
 
-## Getting Started
+2. [Part2](https://www.youtube.com/watch?v=fdUwW0GgcS8&list=PLB6lc7nQ1n4iS5p-IezFFgqP6YvAJy84U&index=2)
 
-This project is a starting point for a Flutter application.
+- Not using `equatable`: We will override equality manually like this only a few times. Otherwise, we'll use Freezed data classes which already override equality themselves.
 
-A few resources to get you started if this is your first Flutter project:
+- Using Either email:
+```
+void showingTheEmailAddressOrFailure() {
+  final emaill = EmailAddress('dsfdf');
+  String emailText = emaill.value.fold(
+    (l) => 'failure',
+    (r) => r,
+  );
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  String emailText2 = emaill.value.getOrElse(() => 'some failure');
+}
+```
