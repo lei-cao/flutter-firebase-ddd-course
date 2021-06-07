@@ -27,6 +27,7 @@ dependencies:
   # custom
   dartz: ^0.10.0-nullsafety.2
   freezed_annotation: ^0.14.2
+  flutter_bloc: ^7.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
