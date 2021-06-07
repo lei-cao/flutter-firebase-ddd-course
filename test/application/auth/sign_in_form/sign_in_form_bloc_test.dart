@@ -19,7 +19,7 @@ void main() {
     final initialState = SignInFormState(
       emailAddress: EmailAddress(''),
       password: Password(''),
-      authFailureOrSuccess: none(),
+      authFailureOrSuccessOption: none(),
       isSubmitting: false,
       showErrorMessages: false,
     );
