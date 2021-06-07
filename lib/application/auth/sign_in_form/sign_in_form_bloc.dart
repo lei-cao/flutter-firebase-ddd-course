@@ -44,7 +44,7 @@ class SignInFormBloc extends Bloc<SignInFormEvent, SignInFormState> {
       },
       signInWithGooglePressed: (e) async* {
         yield state.copyWith(
-          isSubmitting: false,
+          isSubmitting: true,
           authFailureOrSuccessOption: none(),
         );
         final failureOrSuccess = await _authFacade.signInWithGoogle();
