@@ -31,13 +31,13 @@ void main() {
   });
 
   group('emailChanged', () {
-    String newEmail = 'new emailStr';
+    const String newEmail = 'new emailStr';
     blocTest<SignInFormBloc, SignInFormState>(
       'should change email',
       build: () {
         return SignInFormBloc(mockIAuthFacade);
       },
-      act: (bloc) => {bloc.add(SignInFormEvent.emailChanged(newEmail))},
+      act: (bloc) => {bloc.add(const SignInFormEvent.emailChanged(newEmail))},
       expect: () => <SignInFormState>[
         SignInFormState(
           emailAddress: EmailAddress(newEmail),
@@ -59,9 +59,10 @@ void main() {
         password: Password(''),
         isSubmitting: false,
         showErrorMessages: false,
-        authFailureOrSuccessOption: some(Left(AuthFailure.cancelledByUser())),
+        authFailureOrSuccessOption:
+            some(const Left(AuthFailure.cancelledByUser())),
       ),
-      act: (bloc) => {bloc.add(SignInFormEvent.emailChanged(newEmail))},
+      act: (bloc) => {bloc.add(const SignInFormEvent.emailChanged(newEmail))},
       expect: () => <SignInFormState>[
         SignInFormState(
           emailAddress: EmailAddress(newEmail),
@@ -75,7 +76,7 @@ void main() {
   });
 
   group('passwordChanged', () {
-    String newPassword = 'new password';
+    const String newPassword = 'new password';
     blocTest<SignInFormBloc, SignInFormState>(
       'should clear authFailureOrSuccessOption after change password',
       build: () {
@@ -86,9 +87,11 @@ void main() {
         password: Password(''),
         isSubmitting: false,
         showErrorMessages: false,
-        authFailureOrSuccessOption: some(Left(AuthFailure.cancelledByUser())),
+        authFailureOrSuccessOption:
+            some(const Left(AuthFailure.cancelledByUser())),
       ),
-      act: (bloc) => {bloc.add(SignInFormEvent.passwordChanged(newPassword))},
+      act: (bloc) =>
+          {bloc.add(const SignInFormEvent.passwordChanged(newPassword))},
       expect: () => <SignInFormState>[
         SignInFormState(
           emailAddress: EmailAddress(''),
@@ -107,7 +110,8 @@ void main() {
       build: () {
         return SignInFormBloc(mockIAuthFacade);
       },
-      act: (bloc) => {bloc.add(SignInFormEvent.signInWithGooglePressed())},
+      act: (bloc) =>
+          {bloc.add(const SignInFormEvent.signInWithGooglePressed())},
       verify: (_) {
         verify(() => mockIAuthFacade.signInWithGoogle());
       },
@@ -117,10 +121,10 @@ void main() {
       'should signInWithGoogle successfully',
       build: () {
         when(() => mockIAuthFacade.signInWithGoogle())
-            .thenAnswer((_) async => Right(unit));
+            .thenAnswer((_) async => const Right(unit));
         return SignInFormBloc(mockIAuthFacade);
       },
-      act: (bloc) => {bloc.add(SignInFormEvent.signInWithGooglePressed())},
+      act: (bloc) => {bloc.add(const SignInFormEvent.signInWithGooglePressed())},
       expect: () => <SignInFormState>[
         SignInFormState(
           emailAddress: EmailAddress(''),
@@ -134,7 +138,7 @@ void main() {
           password: Password(''),
           isSubmitting: false,
           showErrorMessages: false,
-          authFailureOrSuccessOption: some(Right(unit)),
+          authFailureOrSuccessOption: some(const Right(unit)),
         ),
       ],
     );
@@ -143,10 +147,10 @@ void main() {
       'should signInWithGoogle with cancelledByUser failure',
       build: () {
         when(() => mockIAuthFacade.signInWithGoogle())
-            .thenAnswer((_) async => Left(AuthFailure.cancelledByUser()));
+            .thenAnswer((_) async => const Left(AuthFailure.cancelledByUser()));
         return SignInFormBloc(mockIAuthFacade);
       },
-      act: (bloc) => {bloc.add(SignInFormEvent.signInWithGooglePressed())},
+      act: (bloc) => {bloc.add(const SignInFormEvent.signInWithGooglePressed())},
       expect: () => <SignInFormState>[
         SignInFormState(
           emailAddress: EmailAddress(''),
@@ -160,22 +164,22 @@ void main() {
           password: Password(''),
           isSubmitting: false,
           showErrorMessages: false,
-          authFailureOrSuccessOption: some(Left(AuthFailure.cancelledByUser())),
+          authFailureOrSuccessOption: some(const Left(AuthFailure.cancelledByUser())),
         ),
       ],
     );
   });
 
   group('registerWithEmailAndPasswordPressed', () {
-    final validEmail = 'emailStr@ok.com';
-    final validPass = 'longpass';
+    const validEmail = 'emailStr@ok.com';
+    const validPass = 'longpass';
     blocTest<SignInFormBloc, SignInFormState>(
       'should not call registerWithEmailAndPassword when email or password is not valid',
       build: () {
         return SignInFormBloc(mockIAuthFacade);
       },
       act: (bloc) =>
-          {bloc.add(SignInFormEvent.registerWithEmailAndPasswordPressed())},
+          {bloc.add(const SignInFormEvent.registerWithEmailAndPasswordPressed())},
       verify: (_) {
         verifyNever(() => mockIAuthFacade.registerWithEmailAndPassword(
             emailAddress: EmailAddress('any'), password: Password('any')));
@@ -189,9 +193,9 @@ void main() {
       },
       act: (bloc) => {
         bloc
-          ..add(SignInFormEvent.emailChanged(validEmail))
-          ..add(SignInFormEvent.passwordChanged(validPass))
-          ..add(SignInFormEvent.registerWithEmailAndPasswordPressed())
+          ..add(const SignInFormEvent.emailChanged(validEmail))
+          ..add(const SignInFormEvent.passwordChanged(validPass))
+          ..add(const SignInFormEvent.registerWithEmailAndPasswordPressed())
       },
       verify: (_) {
         verify(() => mockIAuthFacade.registerWithEmailAndPassword(
@@ -204,9 +208,9 @@ void main() {
       'should registerWithEmailAndPassword successfully',
       build: () {
         when(() => mockIAuthFacade.registerWithEmailAndPassword(
-            emailAddress: EmailAddress(validEmail),
-            password: Password(validPass)))
-            .thenAnswer((_) async => Right(unit));
+                emailAddress: EmailAddress(validEmail),
+                password: Password(validPass)))
+            .thenAnswer((_) async => const Right(unit));
         return SignInFormBloc(mockIAuthFacade);
       },
       seed: () => SignInFormState(
@@ -217,7 +221,7 @@ void main() {
         authFailureOrSuccessOption: none(),
       ),
       act: (bloc) =>
-      {bloc.add(SignInFormEvent.registerWithEmailAndPasswordPressed())},
+          {bloc.add(const SignInFormEvent.registerWithEmailAndPasswordPressed())},
       expect: () => <SignInFormState>[
         SignInFormState(
           emailAddress: EmailAddress(validEmail),
@@ -233,8 +237,7 @@ void main() {
           // @todo should we still show error message when succeed?
           // Should show success message instead.
           showErrorMessages: true,
-          authFailureOrSuccessOption:
-          some(Right(unit)),
+          authFailureOrSuccessOption: some(const Right(unit)),
         ),
       ],
     );
@@ -246,7 +249,7 @@ void main() {
                 emailAddress: EmailAddress(validEmail),
                 password: Password(validPass)))
             .thenAnswer((_) async =>
-                Left(AuthFailure.invalidEmailAndPasswordCombination()));
+                const Left(AuthFailure.invalidEmailAndPasswordCombination()));
         return SignInFormBloc(mockIAuthFacade);
       },
       seed: () => SignInFormState(
@@ -257,7 +260,7 @@ void main() {
         authFailureOrSuccessOption: none(),
       ),
       act: (bloc) =>
-          {bloc.add(SignInFormEvent.registerWithEmailAndPasswordPressed())},
+          {bloc.add(const SignInFormEvent.registerWithEmailAndPasswordPressed())},
       expect: () => <SignInFormState>[
         SignInFormState(
           emailAddress: EmailAddress(validEmail),
@@ -272,23 +275,22 @@ void main() {
           isSubmitting: false,
           showErrorMessages: true,
           authFailureOrSuccessOption:
-              some(Left(AuthFailure.invalidEmailAndPasswordCombination())),
+              some(const Left(AuthFailure.invalidEmailAndPasswordCombination())),
         ),
       ],
     );
   });
 
-
   group('signInWithEmailAndPasswordPressed', () {
-    final validEmail = 'emailStr@ok.com';
-    final validPass = 'longpass';
+    const validEmail = 'emailStr@ok.com';
+    const validPass = 'longpass';
     blocTest<SignInFormBloc, SignInFormState>(
       'should not call signInWithEmailAndPassword when email or password is not valid',
       build: () {
         return SignInFormBloc(mockIAuthFacade);
       },
       act: (bloc) =>
-      {bloc.add(SignInFormEvent.signInWithEmailAndPasswordPressed())},
+          {bloc.add(const SignInFormEvent.signInWithEmailAndPasswordPressed())},
       verify: (_) {
         verifyNever(() => mockIAuthFacade.signInWithEmailAndPassword(
             emailAddress: EmailAddress('any'), password: Password('any')));
@@ -302,9 +304,9 @@ void main() {
       },
       act: (bloc) => {
         bloc
-          ..add(SignInFormEvent.emailChanged(validEmail))
-          ..add(SignInFormEvent.passwordChanged(validPass))
-          ..add(SignInFormEvent.signInWithEmailAndPasswordPressed())
+          ..add(const SignInFormEvent.emailChanged(validEmail))
+          ..add(const SignInFormEvent.passwordChanged(validPass))
+          ..add(const SignInFormEvent.signInWithEmailAndPasswordPressed())
       },
       verify: (_) {
         verify(() => mockIAuthFacade.signInWithEmailAndPassword(
@@ -317,9 +319,9 @@ void main() {
       'should signInWithEmailAndPassword successfully',
       build: () {
         when(() => mockIAuthFacade.signInWithEmailAndPassword(
-            emailAddress: EmailAddress(validEmail),
-            password: Password(validPass)))
-            .thenAnswer((_) async => Right(unit));
+                emailAddress: EmailAddress(validEmail),
+                password: Password(validPass)))
+            .thenAnswer((_) async => const Right(unit));
         return SignInFormBloc(mockIAuthFacade);
       },
       seed: () => SignInFormState(
@@ -330,7 +332,7 @@ void main() {
         authFailureOrSuccessOption: none(),
       ),
       act: (bloc) =>
-      {bloc.add(SignInFormEvent.signInWithEmailAndPasswordPressed())},
+          {bloc.add(const SignInFormEvent.signInWithEmailAndPasswordPressed())},
       expect: () => <SignInFormState>[
         SignInFormState(
           emailAddress: EmailAddress(validEmail),
@@ -346,8 +348,7 @@ void main() {
           // @todo should we still show error message when succeed?
           // Should show success message instead.
           showErrorMessages: true,
-          authFailureOrSuccessOption:
-          some(Right(unit)),
+          authFailureOrSuccessOption: some(const Right(unit)),
         ),
       ],
     );
@@ -356,10 +357,10 @@ void main() {
       'should signInWithEmailAndPassword with failure and show error messages',
       build: () {
         when(() => mockIAuthFacade.signInWithEmailAndPassword(
-            emailAddress: EmailAddress(validEmail),
-            password: Password(validPass)))
+                emailAddress: EmailAddress(validEmail),
+                password: Password(validPass)))
             .thenAnswer((_) async =>
-            Left(AuthFailure.invalidEmailAndPasswordCombination()));
+                const Left(AuthFailure.invalidEmailAndPasswordCombination()));
         return SignInFormBloc(mockIAuthFacade);
       },
       seed: () => SignInFormState(
@@ -370,7 +371,7 @@ void main() {
         authFailureOrSuccessOption: none(),
       ),
       act: (bloc) =>
-      {bloc.add(SignInFormEvent.signInWithEmailAndPasswordPressed())},
+          {bloc.add(const SignInFormEvent.signInWithEmailAndPasswordPressed())},
       expect: () => <SignInFormState>[
         SignInFormState(
           emailAddress: EmailAddress(validEmail),
@@ -385,7 +386,7 @@ void main() {
           isSubmitting: false,
           showErrorMessages: true,
           authFailureOrSuccessOption:
-          some(Left(AuthFailure.invalidEmailAndPasswordCombination())),
+              some(const Left(AuthFailure.invalidEmailAndPasswordCombination())),
         ),
       ],
     );

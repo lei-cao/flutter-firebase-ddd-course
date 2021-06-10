@@ -52,7 +52,7 @@ void main() {
             password: Password(validPassword),
           ),
           throwsA(
-            TypeMatcher<UnexpectedValueError>(),
+            const TypeMatcher<UnexpectedValueError>(),
           ),
         );
       },
@@ -69,7 +69,7 @@ void main() {
             password: Password('1'),
           ),
           throwsA(
-            TypeMatcher<UnexpectedValueError>(),
+            const TypeMatcher<UnexpectedValueError>(),
           ),
         );
       },
@@ -106,7 +106,7 @@ void main() {
       // verify
       expect(
         result,
-        equals(Left(AuthFailure.emailAlreadyInUse())),
+        equals(const Left(AuthFailure.emailAlreadyInUse())),
       );
     });
     test('should return serverError', () async {
@@ -127,7 +127,7 @@ void main() {
       // verify
       expect(
         result,
-        equals(Left(AuthFailure.serverError())),
+        equals(const Left(AuthFailure.serverError())),
       );
     });
   });
@@ -171,7 +171,7 @@ void main() {
       // verify
       expect(
         result,
-        equals(Left(AuthFailure.invalidEmailAndPasswordCombination())),
+        equals(const Left(AuthFailure.invalidEmailAndPasswordCombination())),
       );
     });
   });

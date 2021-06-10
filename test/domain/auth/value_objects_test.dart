@@ -8,18 +8,17 @@ void main() {
     group(
       'invalidEmails',
       () {
-        var invalidInputs = [
+        final invalidInputs = [
           "",
           "123",
           "123@",
           "1234@com",
           "124dsf@sdf.",
         ];
-        var expectsFailures = new Map.fromIterable(
-          invalidInputs,
-          key: (v) => v,
-          value: (v) => Left(ValueFailure<String>.invalidEmail(failedValue: v)),
-        );
+        final expectsFailures = {
+          for (var input in invalidInputs)
+            input: Left(ValueFailure<String>.invalidEmail(failedValue: input))
+        };
 
         expectsFailures.forEach((input, expected) {
           test("$input -> $expected", () {
@@ -33,17 +32,15 @@ void main() {
     group(
       'validEmails',
       () {
-        var invalidInputs = [
+        final validInputs = [
           "12@32.com",
           "1@2.c",
         ];
-        var expectsFailures = new Map.fromIterable(
-          invalidInputs,
-          key: (v) => v,
-          value: (v) => Right(v),
-        );
+        final expectsValues = {
+          for (var input in validInputs) input: Right(input)
+        };
 
-        expectsFailures.forEach((input, expected) {
+        expectsValues.forEach((input, expected) {
           test("$input -> $expected", () {
             final result = EmailAddress(input).value;
             expect(result, expected);
@@ -57,17 +54,17 @@ void main() {
     group(
       'invalidPasswords',
       () {
-        var invalidInputs = [
+        final invalidInputs = [
           "",
           "123",
           "12334",
         ];
-        var expectsFailures = new Map.fromIterable(
-          invalidInputs,
-          key: (v) => v,
-          value: (v) =>
-              Left(ValueFailure<String>.shortPassword(failedValue: v)),
-        );
+
+        final expectsFailures = {
+          for (var input in invalidInputs)
+            input: Left(ValueFailure<String>.shortPassword(failedValue: input))
+        };
+
 
         expectsFailures.forEach((input, expected) {
           test("$input -> $expected", () {
@@ -81,17 +78,15 @@ void main() {
     group(
       'validPasswords',
       () {
-        var invalidInputs = [
+        final validInputs = [
           "123456",
           "ds.fjx#",
         ];
-        var expectsFailures = new Map.fromIterable(
-          invalidInputs,
-          key: (v) => v,
-          value: (v) => Right(v),
-        );
+        final expectsValues = {
+          for (var input in validInputs) input: Right(input)
+        };
 
-        expectsFailures.forEach((input, expected) {
+        expectsValues.forEach((input, expected) {
           test("$input -> $expected", () {
             final result = Password(input).value;
             expect(result, expected);

@@ -4,6 +4,7 @@ import 'package:flutter_firebase_ddd_course/domain/core/value_objects.dart';
 import 'package:flutter_firebase_ddd_course/domain/core/value_validators.dart';
 
 class EmailAddress extends ValueObject<String> {
+  @override
   final Either<ValueFailure<String>, String> value;
 
   factory EmailAddress(String input) {
@@ -17,6 +18,7 @@ class EmailAddress extends ValueObject<String> {
 
 
 class Password extends ValueObject<String> {
+  @override
   final Either<ValueFailure<String>, String> value;
 
   factory Password(String input) {

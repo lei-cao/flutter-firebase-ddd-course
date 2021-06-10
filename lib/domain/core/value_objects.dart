@@ -8,9 +8,7 @@ abstract class ValueObject<T> {
   const ValueObject();
   Either<ValueFailure<T>, T> get value;
 
-  T getOrCrash() {
-    return value.fold((f) => throw UnexpectedValueError(f), id);
-  }
+  T getOrCrash() => value.fold((f) => throw UnexpectedValueError(f), id);
 
   bool isValid() => value.isRight();
 
