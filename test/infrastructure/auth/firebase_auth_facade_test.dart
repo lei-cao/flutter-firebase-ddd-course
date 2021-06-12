@@ -2,16 +2,21 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_firebase_ddd_course/domain/auth/auth_failure.dart';
+import 'package:flutter_firebase_ddd_course/domain/auth/user.dart' as user;
 import 'package:flutter_firebase_ddd_course/domain/auth/value_objects.dart';
 import 'package:flutter_firebase_ddd_course/domain/core/errors.dart';
+import 'package:flutter_firebase_ddd_course/domain/core/value_objects.dart';
 import 'package:flutter_firebase_ddd_course/infrastructure/auth/firebase_auth_facade.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 class MockUserCredential extends Mock implements UserCredential {}
+
+class MockFirebaseUser extends Mock implements firebase.User {}
 
 class MockAuthCredential extends Mock implements AuthCredential {}
 
@@ -22,16 +27,58 @@ void main() {
   late MockGoogleSignIn mockGoogleSignIn;
   late FirebaseAuthFacade firebaseAuthFacade;
   late MockUserCredential mockUserCredential;
+  late MockFirebaseUser mockFirebaseUser;
 
   setUp(() {
     mockFirebaseAuth = MockFirebaseAuth();
     mockGoogleSignIn = MockGoogleSignIn();
     mockUserCredential = MockUserCredential();
+    mockFirebaseUser = MockFirebaseUser();
     firebaseAuthFacade = FirebaseAuthFacade(mockFirebaseAuth, mockGoogleSignIn);
   });
 
   const validEmail = 'email@gmail.com';
   const validPassword = 'somepass';
+
+  group('getSignedInUser', () {
+    test(
+      'should return a valid User',
+      () async {
+        // arrange
+        when(() => mockFirebaseAuth.currentUser).thenReturn(mockFirebaseUser);
+        when(() => mockFirebaseUser.uid).thenReturn('test-uid');
+        // act
+        final result = await firebaseAuthFacade.getSignedInUser();
+        // assert
+        expect(
+          result,
+          equals(
+            some(
+              user.User(
+                id: UniqueId.fromUniqueString('test-uid'),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+    test(
+      'should return none',
+      () async {
+        // arrange
+        when(() => mockFirebaseAuth.currentUser).thenReturn(null);
+        // act
+        final result = await firebaseAuthFacade.getSignedInUser();
+        // assert
+        expect(
+          result,
+          equals(
+            none(),
+          ),
+        );
+      },
+    );
+  });
 
   group('registerWithEmailAndPassword', () {
     setUp(() {
@@ -180,6 +227,37 @@ void main() {
     setUp(() {});
     test('should call firebaseAuth.signInWithCredential', () async {
       // @todo
+    });
+  });
+
+  group('signOut', () {
+    setUp(() {
+      when(
+        () => mockFirebaseAuth.signOut(),
+      ).thenAnswer(
+        (_) async => Future.value(),
+      );
+      when(
+        () => mockGoogleSignIn.signOut(),
+      ).thenAnswer(
+        (_) async => Future.value(),
+      );
+    });
+    test('should call firebaseAuth.signOut', () async {
+      // act
+      await firebaseAuthFacade.signOut();
+      // verify
+      verify(
+        () => mockFirebaseAuth.signOut(),
+      );
+    });
+    test('should call google.signOut', () async {
+      // act
+      await firebaseAuthFacade.signOut();
+      // verify
+      verify(
+        () => mockGoogleSignIn.signOut(),
+      );
     });
   });
 }
