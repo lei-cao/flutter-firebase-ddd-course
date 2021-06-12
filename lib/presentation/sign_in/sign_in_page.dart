@@ -11,11 +11,11 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sign In'),
+        title: const Text('Sign In'),
       ),
       body: BlocProvider(
         create: (context) => getIt<SignInFormBloc>(),
-        child: SignInForm(),
+        child: const SignInForm(),
       ),
     );
   }
