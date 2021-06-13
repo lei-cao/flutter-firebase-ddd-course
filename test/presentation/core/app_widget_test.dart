@@ -8,6 +8,6 @@ void main() {
     configureInjection(Environment.test);
   });
   testWidgets('AppWidget should run', (WidgetTester tester) async {
-    await tester.pumpWidget(const AppWidget());
+    await tester.pumpWidget(AppWidget());
   });
 }
